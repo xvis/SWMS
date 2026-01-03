@@ -1,0 +1,45 @@
+<div class="login-container">
+  <div class="overlay">
+    <div class="login-card">
+      <h2 class="text-center">Smart Workforce Management System</h2>
+      <div class="card">
+        <div class="card-body">
+          <form (ngSubmit)="onLogin()">
+            <div class="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                [(ngModel)]="email"
+                name="email"
+                class="form-control"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div class="form-group mt-3">
+              <label>Password</label>
+              <input
+                type="password"
+                [(ngModel)]="password"
+                name="password"
+                class="form-control"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-4">Login</button>
+          </form>
+
+          <p class="text-danger mt-3 text-center">{{ message }}</p>
+
+          <div class="mt-4 text-center">
+            <a (click)="goToRegister()" class="link">Register</a> |
+            <a (click)="goToForgotPassword()" class="link">Forgot Password?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

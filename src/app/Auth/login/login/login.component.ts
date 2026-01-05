@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -13,28 +14,43 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   standalone:true,
-  imports: [MatFormFieldModule, MatInputModule, MatIconModule,MatCardModule,ReactiveFormsModule,FormsModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatIconModule,MatCardModule,ReactiveFormsModule,FormsModule],
 })
 export class LoginComponent {
   email = '';
   password = '';
   message = '';
+  showPassword = false;
+  rememberMe = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin() {
+    if (!this.email || !this.password) {
+      this.message = 'Please enter both email and password!';
+      return;
+    }
+
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
-        this.message = 'Login successful!';
-        console.log('User:', res);
-        // Example: redirect to dashboard
-        this.router.navigate(['/dashboard']);
+        this.message = 'Login successful! Redirecting...';
+        console.log('Login response:', res);
+        console.log('Access Token stored:', res.accessToken);
+        
+        // Navigate to dashboard after successful login
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 500);
       },
-      error: () => {
-        this.message = 'Invalid email or password!';
+      error: (err) => {
+        this.message = err.error?.message || 'Invalid email or password!';
+        console.error('Login error:', err);
       }
     });
+  }
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   goToRegister() {
